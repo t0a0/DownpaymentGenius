@@ -23,6 +23,12 @@ describe('help coverage', () => {
     expect(new Set(ALL_FIELDS.map((f) => f.key))).toEqual(new Set(inputKeys));
   });
 
+  it('every input explains how it is used, in EN + DE', () => {
+    for (const dict of [en, de] as Record<string, string>[]) {
+      expect(inputKeys.filter((k) => !dict[`help.${k}.use`])).toEqual([]);
+    }
+  });
+
   for (const key of keys) {
     it(`${key} has EN + DE help`, () => {
       const entry = HELP[key];

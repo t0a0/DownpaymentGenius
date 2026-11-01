@@ -241,6 +241,7 @@ export const de: Record<DictKey, string> = {
   'help.germanTerm': 'Fachbegriff',
   'help.typical': 'Typisch / Historie',
   'help.open': 'Hilfe: {title}',
+  'help.use': 'So fließt es ein',
 
   'prompt.template':
     'Ich nutze einen Rechner, der entscheidet, ob ich in Deutschland jetzt eine Immobilie kaufe oder weiter spare und später kaufe. Erkläre „{term}“ ({germanTerm}) ausführlich: was es ist, wie es in Deutschland funktioniert, typische Werte im Jahr {currentYear}, wie es die Entscheidung „jetzt kaufen oder warten“ beeinflusst und häufige Fehler. Meine aktuelle Einstellung: {value}. Kontext: Kaufpreis {price}, {state}, Eigenkapital {down}, Darlehen {loan}, Zins {rate}, Horizont {year}.',
@@ -374,6 +375,116 @@ export const de: Record<DictKey, string> = {
   'help.sim.liquidate.short': 'Am Horizont: Depot nach der Steuer, die ein Verkauf kosten würde, Immobilie nach Verkaufskosten. Aus: beide brutto.',
   'help.sim.sellingCosts.title': 'Verkaufskosten',
   'help.sim.sellingCosts.short': 'Maklerprovision des Verkäufers und sonstige Kosten, am Horizont von der Immobilie abgezogen, wenn nach Verkauf bewertet wird.',
+
+  'help.you.capital.use':
+    'Ihr Startvermögen in jeder Strategie. Beim Kauf werden Eigenkapital und Nebenkosten daraus verkauft (der Gewinn wird versteuert); der Rest erzielt weiter die erwartete Rendite. Mehr Kapital ermöglicht einen früheren Kauf oder ein kleineres Darlehen.',
+  'help.you.capitalGainPct.use':
+    'Bestimmt die Steuer, wann immer heutige Anteile verkauft werden: für das Eigenkapital, in Monaten, in denen Eigentum mehr kostet als Ihr Budget, und am Horizont bei Bewertung nach Verkauf. Ein hoher Gewinnanteil macht Eigenkapital aus dem Depot teurer.',
+  'help.you.cash.use':
+    'Teil Ihres Startvermögens. Bis zur Höhe des Notgroschens bleibt es zum Tagesgeldzins auf dem Konto; der Rest wird ab dem ersten Monat angelegt und kann wie das Depot das Eigenkapital bezahlen.',
+  'help.you.cushion.use':
+    'Für den Kauf zurückgehaltenes Geld: Der Notgroschen fließt nie ins Eigenkapital und bringt nur den Tagesgeldzins statt der erwarteten Rendite. Ein größerer Notgroschen lässt weniger Geld für den Kauf.',
+  'help.you.monthlySavings.use':
+    'Bestimmt das Monatsbudget jeder Strategie (Kaltmiete + Sparrate). Mieter legen die Sparrate an; Eigentümer zahlen Rate und Eigentümerkosten aus demselben Budget und legen den Rest an oder verkaufen Anteile, wenn es nicht reicht. Eine höhere Sparrate baut das Eigenkapital schneller auf.',
+  'help.you.savingsGrowth.use':
+    'Erhöht das Monatsbudget jeder Strategie Jahr für Jahr. Mehr Wachstum heißt später mehr zum Anlegen und macht eine heute knappe Rate mit der Zeit leichter tragbar.',
+  'help.you.netIncome.use':
+    'Nur für die Prüfung durch die Bank: Kaufmonate und Beleihungen, deren Rate die Ratengrenze (einen Anteil dieses Einkommens) übersteigt, sind ausgeschlossen. Außerdem ergibt es die Kennzahl Rate / Einkommen. Ihr Budget ändert es nicht; das ergibt sich aus Miete + Sparrate.',
+  'help.you.incomeGrowth.use':
+    'Erhöht das Einkommen für die Prüfung durch die Bank, sodass ein Darlehen, das heute an der Ratengrenze scheitert, in einem späteren Kaufmonat möglich wird. Ihre Sparrate erhöht es nicht; dafür gibt es die Steigerung der Sparrate.',
+  'help.you.birthYear.use':
+    'Nur relevant, wenn der Horizont als Alter angegeben ist: Horizont-Jahr = Geburtsjahr + Horizont-Alter. Sonst ändert es die Ergebnisse nicht.',
+  'help.you.household.use':
+    'Paare erhalten jedes Jahr den doppelten Sparerpauschbetrag, daher zahlt jede Strategie weniger Steuer auf ihre Erträge. In Hessen bestimmt es außerdem, wie viele Käufer Hessengeld erhalten (je 10.000 €).',
+  'help.you.churchTax.use':
+    'Erhöht die Steuer auf alle Kapitalerträge (Erträge, Vorabpauschale, Verkäufe) von ≈ 26,4 % auf ≈ 28 %; angelegtes Geld wächst so in jeder Strategie etwas langsamer.',
+  'help.you.firstTimeBuyer.use':
+    'In Hessen Voraussetzung für Hessengeld: Käufe bis zur Frist erhalten 10.000 € je Käufer + 5.000 € je Kind (höchstens die gezahlte Grunderwerbsteuer), in 10 Jahresraten. Das kann den besten Kaufzeitpunkt nach vorne ziehen. In anderen Bundesländern ohne Wirkung.',
+  'help.you.childBirthYears.use':
+    'In Hessen bringt bei eingeschaltetem Ersterwerber jedes Kind unter 18 beim Kauf 5.000 € Hessengeld; eine Geburt oder ein 18. Geburtstag kann daher den besten Kaufmonat verschieben. In anderen Bundesländern ohne Wirkung.',
+  'help.invest.expectedReturn.use':
+    'Das Wachstum allen angelegten Geldes in jeder Strategie. So viel würde Ihr Eigenkapital bringen, wenn Sie weiter mieten; das ist der wichtigste Preis dafür, Geld in einer Immobilie zu binden. Eine höhere Rendite spricht für längeres Mieten und ein größeres Darlehen.',
+  'help.invest.fundType.use':
+    'Bestimmt, welcher Anteil der Fondserträge steuerfrei ist. Weniger Steuer lässt in jeder Strategie mehr Rendite angelegt und spricht leicht dafür, Geld im Depot zu lassen.',
+  'help.invest.cashRate.use':
+    'Der Notgroschen erzielt diesen Zins nach Steuern in jeder Strategie. Da der Notgroschen beim Mieten und Kaufen gleich ist, beeinflusst er kaum, welche Strategie gewinnt.',
+  'help.invest.basiszins.use':
+    'Bestimmt die Vorabpauschale, deren Steuer jedes Jahr im Januar aus dem Depot genommen wird. Ein höherer Basiszins zieht mehr Steuer früh ab; sie wird beim Verkauf angerechnet und verschiebt die Steuer daher vor allem zeitlich nach vorne.',
+  'help.rent.coldRent.use':
+    'Was Mieten kostet: Sie zahlen sie bis zum Kauf, oder bis zum Horizont, wenn Sie nie kaufen. Sie ist auch Teil des Monatsbudgets (Kaltmiete + Sparrate); nach dem Kauf fließt die wegfallende Miete in Rate und Eigentümerkosten. Eine höhere Miete macht Kaufen attraktiver.',
+  'help.rent.rentGrowth.use':
+    'Miete und Monatsbudget steigen jedes Jahr um diesen Wert. Mieter geben den Anstieg für die Miete aus, Eigentümer legen ihn neben einer festen Rate an; schneller steigende Mieten sprechen daher für einen früheren Kauf.',
+  'help.property.type.use':
+    'Bestimmt die Eigentümerkosten. Wohnung: Hausgeld + Instandhaltung pro m² + Grundsteuer. Haus: Instandhaltung pro m² + Gebäudeversicherung + Grundsteuer. Eigentümer zahlen sie jeden Monat und können entsprechend weniger anlegen.',
+  'help.property.city.use':
+    'Eine Abkürzung: wählt das Bundesland und setzt Preis- und Mietsteigerung auf örtliche Werte. Die Stadt selbst geht nicht in die Berechnung ein, nur diese Werte.',
+  'help.property.state.use':
+    'Bestimmt die Grunderwerbsteuer beim Kauf (3,5–6,5 % des Kaufpreises; verlorenes Geld, das beim Warten mit dem Preis steigt), den Kirchensteuersatz und ob Hessengeld gilt (nur Hessen).',
+  'help.property.price.use':
+    'Grundlage jeder Kaufstrategie: Spätere Käufe zahlen diesen Preis plus Preissteigerung, die Nebenkosten sind ein Prozentsatz davon, jede Beleihung ein Anteil davon, und er ist der Startwert der Immobilie im Nettovermögen.',
+  'help.property.area.use':
+    'Multipliziert die Eigentümerkosten pro m² (Hausgeld, Instandhaltung): Eine größere Immobilie kostet jeden Monat mehr. Außerdem skaliert sie typischen Preis und Miete der Stadt-Vorlage.',
+  'help.property.priceGrowth.use':
+    'Wirkt in zwei Richtungen: Warten macht den Kauf (und die prozentualen Nebenkosten) teurer, nach dem Kauf wächst der Wert Ihrer Immobilie um Preissteigerung minus Alterungsabschlag. Höhere Preissteigerung spricht für einen früheren Kauf.',
+  'help.property.ageingDrag.use':
+    'Senkt das Wertwachstum Ihrer eigenen Immobilie nach dem Kauf, nicht aber den Preis, den Sie beim Warten zahlen. Ein höherer Abschlag heißt weniger Immobilienwert am Horizont und macht Kaufen weniger attraktiv.',
+  'help.property.notaryPct.use':
+    'Kaufnebenkosten in % des Kaufpreises, aus Eigenmitteln bezahlt, sofern die Nebenkosten nicht mitfinanziert werden. In jeder Kaufstrategie verlorenes Geld, das beim Warten mit dem Preis steigt.',
+  'help.property.brokerPct.use':
+    'Kaufnebenkosten in % des Kaufpreises, aus Eigenmitteln bezahlt, sofern die Nebenkosten nicht mitfinanziert werden. In jeder Kaufstrategie verlorenes Geld, das beim Warten mit dem Preis steigt.',
+  'help.property.noBroker.use':
+    'Entfernt die Maklerprovision aus den Kaufnebenkosten: Beim Kauf wird weniger Geld gebraucht, und jede Kaufstrategie verbessert sich.',
+  'help.property.oneOffCosts.use':
+    'Wird zum Geldbedarf beim Kauf addiert und zählt in jeder Kaufstrategie als verlorenes Geld; es erhöht also das nötige Eigenkapital.',
+  'help.property.hausgeld.use':
+    'Hausgeld × Wohnfläche wird nach dem Kauf jeden Monat gezahlt und steigt mit der Inflation. Mieter zahlen es nicht; es spricht also gegen den Kauf und lässt Eigentümern weniger zum Anlegen.',
+  'help.property.maintenance.use':
+    'Instandhaltung × Wohnfläche wird nach dem Kauf jeden Monat gezahlt und steigt mit der Inflation. Mieter zahlen sie nicht; sie spricht also gegen den Kauf und lässt Eigentümern weniger zum Anlegen.',
+  'help.property.insurance.use':
+    'Von Hauseigentümern in monatlichen Zwölfteln gezahlt, steigt mit der Inflation. Spricht gegen den Kauf und lässt Eigentümern weniger zum Anlegen.',
+  'help.property.grundsteuer.use':
+    'Von Eigentümern in monatlichen Zwölfteln als zusätzliche Eigentümerkosten gezahlt, steigt mit der Inflation. Lassen Sie 0 stehen, wenn Ihre Miete sie bereits über die Betriebskosten enthält.',
+  'help.property.hessengeldExtension.use':
+    'Aus: Käufe nach Okt. 2029 erhalten kein Hessengeld, wodurch ein Kauf davor am besten wirken kann. Ein: Auch spätere Kaufmonate erhalten es.',
+  'help.mortgage.rateTiers.use':
+    'Bestimmt den Zins für jede Darlehenshöhe und damit die wichtigsten Kosten des Darlehens: Das Modell wägt diese Zinsen gegen Ihre Rendite ab, um die beste Beleihung zu finden. Bei automatischer Anschlussfinanzierung bestimmt sie auch die Anschlusszinsen.',
+  'help.mortgage.fixationAdj.use':
+    'Wird für die gewählte Zinsbindung auf den Tabellenzins aufgeschlagen, beim Kauf und (bei automatischer Anschlussfinanzierung) bei jeder Anschlussfinanzierung. Ein höherer Aufschlag macht eine lange Zinsbindung teurer.',
+  'help.mortgage.fixationYears.use':
+    'Wählt den Aufschlag aus der Tabelle und bestimmt, wann die Restschuld neu finanziert wird. Eine längere Zinsbindung kostet meist jetzt mehr, schützt das Darlehen aber länger vor der Zinsdrift.',
+  'help.mortgage.bwDiscount.use':
+    'Zinsen werden nach Darlehen ÷ (Kaufpreis × (1 − Abschlag)) eingestuft; ein Abschlag schiebt jedes Darlehen in eine höhere, teurere Stufe und senkt das größtmögliche Darlehen.',
+  'help.mortgage.tilgung.use':
+    'Bestimmt die Monatsrate: Darlehen × (Zins + Tilgung) / 12. Höhere Tilgung heißt weniger Zinsen insgesamt und früher schuldenfrei, lässt aber weniger vom Budget zum Anlegen und muss unter der Ratengrenze der Bank bleiben.',
+  'help.mortgage.sondertilgung.use':
+    'Jedes Darlehensjahr wird dieser Anteil des Ursprungsdarlehens zusätzlich getilgt, aus dem Budget oder dem Depot. Das spart Zinsen und bringt die Schuldenfreiheit näher, aber dieses Geld erzielt keine Rendite mehr.',
+  'help.mortgage.drift.use':
+    'Verschiebt jeden künftigen Zins um so viele Prozentpunkte pro Jahr, bis die Drift endet: für spätere Käufe und (bei automatischer Anschlussfinanzierung) für Anschlussfinanzierungen. Steigende Zinsen machen Warten teurer, fallende belohnen es.',
+  'help.mortgage.driftYears.use':
+    'Wie lange die Drift anhält. Je länger, desto größer die gesamte Zinsänderung für späte Käufe und Anschlussfinanzierungen.',
+  'help.mortgage.followUpMode.use':
+    'Bestimmt den Zins auf die Restschuld nach jeder Zinsbindung und damit die Zinsen nach der Anschlussfinanzierung und den Zeitpunkt der Schuldenfreiheit. Automatisch sinkt der Zins meist, weil die Restschuld im Verhältnis zum Immobilienwert schrumpft.',
+  'help.mortgage.followUpRate.use':
+    'Der Zins auf die Restschuld nach jeder Zinsbindung. Ein höherer Zins erhöht Zinsen und Rate nach der Anschlussfinanzierung und verzögert die Schuldenfreiheit.',
+  'help.mortgage.financeFees.use':
+    'Erlaubt dem Modell, auch die Nebenkosten zu leihen (Darlehen bis 110 % des Kaufpreises): früher kaufen mit weniger Eigenkapital, aber zur teuersten Zinsstufe. Das Modell wählt das nur, wenn es sich lohnt.',
+  'help.mortgage.maxPaymentShare.use':
+    'Die Prüfung durch die Bank: Jeder Kaufmonat und jede Beleihung, deren Rate diesen Anteil des Nettoeinkommens übersteigt, ist ausgeschlossen. Eine niedrigere Grenze erzwingt ein kleineres Darlehen oder einen späteren Kauf.',
+  'help.sim.horizonMode.use':
+    'Legt fest, wie der Vergleichszeitpunkt bestimmt wird. Alle Ergebnisse vergleichen das Nettovermögen zu diesem Zeitpunkt.',
+  'help.sim.horizonYear.use':
+    'Der Zeitpunkt, an dem alle Strategien nach Nettovermögen verglichen werden. Ein längerer Horizont gibt der Immobilie mehr Zeit zum Wachsen und den Kaufnebenkosten Zeit, sich zu amortisieren; ein kurzer spricht für Mieten.',
+  'help.sim.horizonAge.use':
+    'Legt den Vergleichszeitpunkt über Ihr Alter fest (Geburtsjahr + dieses Alter). Ein längerer Horizont gibt der Immobilie mehr Zeit zum Wachsen und den Kaufnebenkosten Zeit, sich zu amortisieren; ein kurzer spricht für Mieten.',
+  'help.sim.maxWait.use':
+    'Begrenzt, welche Kaufmonate nach dem besten Zeitpunkt durchsucht werden. Liegt der beste Zeitpunkt am Ende dieses Bereichs, kann noch längeres Warten besser sein.',
+  'help.sim.cpi.use':
+    'Eigentümer- und Einmalkosten steigen damit, und die Anzeige „in heutigem Geld“ wird damit bereinigt. Miete, Preise und Renditen haben eigene Steigerungsraten und sind nicht betroffen.',
+  'help.sim.real.use': 'Nur Anzeige: Beträge werden um die Inflation bis zum Horizont bereinigt. Welche Strategie gewinnt, ändert sich nicht.',
+  'help.sim.liquidate.use':
+    'Ein: Am Horizont zählt das Depot nach der Steuer auf seine Gewinne und die Immobilie nach Verkaufskosten, beide also wie Bargeld. Aus: beide brutto, als ob Sie sie behalten.',
+  'help.sim.sellingCosts.use':
+    'Wird bei Bewertung nach Verkauf am Horizont vom Immobilienwert abgezogen; höhere Verkaufskosten sprechen also gegen den Kauf.',
 
   'help.kpi.bestMoment.title': 'Bester Kaufzeitpunkt',
   'help.kpi.bestMoment.short': 'Kaufmonat und Beleihung mit dem höchsten Nettovermögen am Horizont, oder „weiter mieten“, wenn Nie-kaufen gewinnt.',

@@ -578,7 +578,7 @@ select {
 .help-pop {
   position: fixed;
   z-index: 1000;
-  width: min(320px, calc(100vw - 24px));
+  width: min(340px, calc(100vw - 24px));
   padding: 12px 14px;
   background: var(--surface-raised);
   color: var(--text);
@@ -607,6 +607,12 @@ select {
   color: var(--text-secondary);
 }
 
+.help-use {
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.help-use span,
 .help-hint span,
 .help-term span {
   font-weight: 500;

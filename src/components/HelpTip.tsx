@@ -2,12 +2,16 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from
 import { createPortal } from 'react-dom';
 import { buildHelpPrompt } from '../help/prompt';
 import { HELP } from '../help/registry';
+import { hasKey } from '../i18n';
 import { useT } from '../i18n/useT';
 import { useStore } from '../state/store';
 
-const OPEN_DELAY = 250;
 const CLOSE_DELAY = 200;
 const GUTTER = 12;
+const GAP = 8;
+
+/** Only one popup at a time: opening one closes the previous one right away. */
+let closeOpen: (() => void) | null = null;
 
 async function copyText(text: string): Promise<boolean> {
   try {
@@ -33,8 +37,10 @@ async function copyText(text: string): Promise<boolean> {
 
 /** The "?" next to every input, KPI and chart title: hover, focus or tap opens a short explanation. */
 export function HelpTip({ k, value }: { k: string; value?: string }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const entry = HELP[k];
+  // Inputs also explain how they feed the calculation.
+  const use = hasKey(lang, `help.${k}.use`) ? t(`help.${k}.use`) : null;
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState<'idle' | 'ok' | 'fail'>('idle');
   const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
@@ -43,6 +49,8 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   // A mouse click focuses the button (which opens it) right before the click event; don't toggle it shut.
   const openedByFocus = useRef(0);
+  // Hovering already opened it, so a click while the mouse is over the button must not close it either.
+  const hovering = useRef(false);
   // The clipboard fallback focuses a temporary textarea; that must not count as leaving the popup.
   const copying = useRef(false);
   const id = useId();
@@ -59,7 +67,10 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
     setCopied('idle');
   }, []);
 
-  /** Keep the popup next to its button and inside the viewport (also while the page scrolls). */
+  /**
+   * Keep the popup next to its button and inside the viewport (also while the page scrolls): to the right of
+   * the button, else to its left, with its title level with the "?"; below or above it when neither side fits.
+   */
   const place = useCallback(() => {
     if (!btn.current || !pop.current) return;
     const r = btn.current.getBoundingClientRect();
@@ -67,9 +78,17 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
     const h = pop.current.offsetHeight;
     const vw = document.documentElement.clientWidth;
     const vh = window.innerHeight;
+    const right = r.right + GAP;
+    const leftSide = r.left - GAP - w;
+    if (right + w <= vw - GUTTER || leftSide >= GUTTER) {
+      const left = right + w <= vw - GUTTER ? right : leftSide;
+      const top = Math.max(GUTTER, Math.min(r.top + r.height / 2 - 20, vh - h - GUTTER));
+      setPos({ left, top });
+      return;
+    }
     const left = Math.min(Math.max(GUTTER, r.left + r.width / 2 - w / 2), vw - w - GUTTER);
-    let top = r.bottom + 8;
-    if (top + h > vh - GUTTER) top = Math.max(GUTTER, r.top - h - 8);
+    let top = r.bottom + GAP;
+    if (top + h > vh - GUTTER) top = Math.max(GUTTER, r.top - h - GAP);
     setPos({ left, top });
   }, []);
 
@@ -79,6 +98,8 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
 
   useEffect(() => {
     if (!open) return;
+    if (closeOpen !== close) closeOpen?.();
+    closeOpen = close;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         close();
@@ -94,6 +115,7 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
     window.addEventListener('scroll', place, { passive: true, capture: true });
     window.addEventListener('resize', place);
     return () => {
+      if (closeOpen === close) closeOpen = null;
       document.removeEventListener('keydown', onKey);
       document.removeEventListener('pointerdown', onDown);
       window.removeEventListener('scroll', place, { capture: true });
@@ -131,8 +153,17 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
         aria-describedby={`${id}-d`}
         aria-expanded={open}
         aria-controls={open ? `${id}-p` : undefined}
-        onPointerEnter={(e) => e.pointerType === 'mouse' && later(() => setOpen(true), OPEN_DELAY)}
-        onPointerLeave={(e) => e.pointerType === 'mouse' && later(close, CLOSE_DELAY)}
+        onPointerEnter={(e) => {
+          if (e.pointerType !== 'mouse') return;
+          hovering.current = true;
+          cancel();
+          setOpen(true);
+        }}
+        onPointerLeave={(e) => {
+          if (e.pointerType !== 'mouse') return;
+          hovering.current = false;
+          later(close, CLOSE_DELAY);
+        }}
         onFocus={() => {
           if (!open) openedByFocus.current = performance.now();
           setOpen(true);
@@ -146,7 +177,10 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
           e.stopPropagation();
           e.preventDefault();
           cancel();
-          if (performance.now() - openedByFocus.current < 500) return;
+          if (hovering.current || performance.now() - openedByFocus.current < 500) {
+            setOpen(true);
+            return;
+          }
           setOpen((o) => !o);
         }}
       >
@@ -155,6 +189,7 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
       {/* aria-describedby may point at a hidden element; keeping it hidden keeps headings' names clean */}
       <span id={`${id}-d`} hidden>
         {t(`help.${k}.short`)}
+        {use && ` ${use}`}
       </span>
       {open &&
         createPortal(
@@ -179,6 +214,11 @@ export function HelpTip({ k, value }: { k: string; value?: string }) {
               </div>
             )}
             <p>{t(`help.${k}.short`)}</p>
+            {use && (
+              <p className="help-use">
+                <span>{t('help.use')}:</span> {use}
+              </p>
+            )}
             {entry?.hint && (
               <p className="help-hint">
                 <span>{t('help.typical')}:</span> {t(entry.hint)}
