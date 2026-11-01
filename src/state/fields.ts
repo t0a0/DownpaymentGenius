@@ -250,4 +250,5 @@ export const CHART_KEYS = [
   'chart.stress',
   'chart.scenarios',
   'chart.yearly',
+  'chart.loanPeriods',
 ] as const;

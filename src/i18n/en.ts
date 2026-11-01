@@ -207,6 +207,26 @@ export const en = {
   'status.serious': 'Strained',
   'status.critical': 'Critical',
 
+  'periods.summary':
+    'The rate is fixed for {years} years at a time. When a period ends, the remaining balance is refinanced at the follow-up rate for another {years} years, until the loan is repaid.',
+  'periods.loan': 'Loan',
+  'periods.dates': 'Fixed-rate period',
+  'periods.balance': 'Balance at start',
+  'periods.rate': 'Rate (eff.)',
+  'periods.payment': 'Monthly payment',
+  'periods.interest': 'Interest',
+  'periods.principal': 'Repaid',
+  'periods.balanceEnd': 'Balance at end',
+  'periods.first': 'Purchase loan',
+  'periods.refi': 'Refinancing {n}',
+  'periods.paidOff': 'Paid off',
+  'periods.total': 'Whole loan',
+  'periods.cash': 'Cash purchase: no loan.',
+  'periods.notRepaid': 'Not repaid within 60 years of the purchase.',
+  'periods.beyond':
+    "Grey rows lie after the horizon ({year}). They don't change net worth at the horizon, where the remaining balance counts as debt.",
+  'periods.nominal': 'Loan amounts are nominal, as in the loan contract.',
+
   'yearly.show': 'Show yearly table',
   'yearly.hide': 'Hide yearly table',
   'yearly.strategy': 'Strategy',
@@ -337,7 +357,8 @@ export const en = {
   'help.mortgage.fixationAdj.title': 'Surcharge by Zinsbindung',
   'help.mortgage.fixationAdj.short': 'Rate difference of 5/15/20-year fixation vs 10 years, in percentage points.',
   'help.mortgage.fixationYears.title': 'Zinsbindung',
-  'help.mortgage.fixationYears.short': 'Years the rate is fixed. After that the remaining balance is refinanced at the follow-up rate.',
+  'help.mortgage.fixationYears.short':
+    'Years the rate is fixed, not the loan term. The loan runs until repaid: each time the period ends, the remaining balance is refinanced at the follow-up rate for another period of the same length.',
   'help.mortgage.bwDiscount.title': 'Beleihungswert discount',
   'help.mortgage.bwDiscount.short': 'Banks tier rates on the Beleihungswert, often 10–20 % below the price. 0 % means tiers by loan ÷ price, as in most rate tables.',
   'help.mortgage.tilgung.title': 'Initial repayment',
@@ -417,6 +438,9 @@ export const en = {
   'help.chart.scenarios.short': 'Named historical episodes with co-moving prices, rents, rates and returns.',
   'help.chart.yearly.title': 'Yearly table',
   'help.chart.yearly.short': 'Flows and balances per year for one strategy.',
+  'help.chart.loanPeriods.title': 'Loan periods',
+  'help.chart.loanPeriods.short':
+    'The loan as a chain of fixed-rate periods: the purchase loan, then a refinancing each time the Zinsbindung ends, until it is repaid. Follow-up rates come from the follow-up financing setting.',
 } as const;
 
 export type DictKey = keyof typeof en;

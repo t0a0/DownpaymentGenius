@@ -209,6 +209,26 @@ export const de: Record<DictKey, string> = {
   'status.serious': 'Angespannt',
   'status.critical': 'Kritisch',
 
+  'periods.summary':
+    'Der Zins ist jeweils {years} Jahre fest. Am Ende jeder Zinsbindung wird die Restschuld zum Anschlusszins für weitere {years} Jahre finanziert, bis das Darlehen getilgt ist.',
+  'periods.loan': 'Darlehen',
+  'periods.dates': 'Zinsbindung',
+  'periods.balance': 'Restschuld zu Beginn',
+  'periods.rate': 'Effektivzins',
+  'periods.payment': 'Monatsrate',
+  'periods.interest': 'Zinsen',
+  'periods.principal': 'Tilgung',
+  'periods.balanceEnd': 'Restschuld am Ende',
+  'periods.first': 'Erstfinanzierung',
+  'periods.refi': 'Anschlussfinanzierung {n}',
+  'periods.paidOff': 'Getilgt',
+  'periods.total': 'Gesamtes Darlehen',
+  'periods.cash': 'Barkauf: kein Darlehen.',
+  'periods.notRepaid': 'Nicht innerhalb von 60 Jahren nach dem Kauf getilgt.',
+  'periods.beyond':
+    'Graue Zeilen liegen nach dem Horizont ({year}). Sie ändern das Nettovermögen am Horizont nicht; dort zählt die Restschuld als Schuld.',
+  'periods.nominal': 'Darlehensbeträge sind nominal, wie im Darlehensvertrag.',
+
   'yearly.show': 'Jahrestabelle anzeigen',
   'yearly.hide': 'Jahrestabelle ausblenden',
   'yearly.strategy': 'Strategie',
@@ -338,7 +358,8 @@ export const de: Record<DictKey, string> = {
   'help.mortgage.fixationAdj.title': 'Aufschlag je Zinsbindung',
   'help.mortgage.fixationAdj.short': 'Zinsunterschied von 5/15/20 Jahren Zinsbindung gegenüber 10 Jahren, in Prozentpunkten.',
   'help.mortgage.fixationYears.title': 'Zinsbindung',
-  'help.mortgage.fixationYears.short': 'Jahre mit festem Zins. Danach wird die Restschuld zum Anschlusszins weiterfinanziert.',
+  'help.mortgage.fixationYears.short':
+    'Jahre mit festem Zins, nicht die Laufzeit. Das Darlehen läuft bis zur Tilgung: Am Ende jeder Zinsbindung wird die Restschuld zum Anschlusszins für eine weitere, gleich lange Zinsbindung finanziert.',
   'help.mortgage.bwDiscount.title': 'Abschlag Beleihungswert',
   'help.mortgage.bwDiscount.short': 'Banken stufen nach dem Beleihungswert ein, oft 10–20 % unter dem Kaufpreis. 0 % heißt: Stufen nach Darlehen ÷ Kaufpreis, wie in den meisten Zinstabellen.',
   'help.mortgage.tilgung.title': 'Anfängliche Tilgung',
@@ -416,4 +437,7 @@ export const de: Record<DictKey, string> = {
   'help.chart.scenarios.short': 'Benannte historische Phasen mit gemeinsam bewegten Preisen, Mieten, Zinsen und Renditen.',
   'help.chart.yearly.title': 'Jahrestabelle',
   'help.chart.yearly.short': 'Zahlungen und Bestände pro Jahr für eine Strategie.',
+  'help.chart.loanPeriods.title': 'Zinsbindungsphasen',
+  'help.chart.loanPeriods.short':
+    'Das Darlehen als Folge von Zinsbindungen: die Erstfinanzierung, dann eine Anschlussfinanzierung bei jedem Ende der Zinsbindung, bis es getilgt ist. Die Anschlusszinsen folgen der Einstellung zur Anschlussfinanzierung.',
 };
