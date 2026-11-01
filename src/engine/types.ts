@@ -161,6 +161,25 @@ export interface RefiInfo {
   paymentShare: number;
 }
 
+/** One fixed-rate period (Zinsbindung): the purchase loan, then one per refinancing until the loan is repaid. */
+export interface LoanPeriod {
+  /** month index of the first payment at this rate */
+  start: number;
+  /** month index of the last payment at this rate */
+  end: number;
+  /** balance when the period starts */
+  balance: number;
+  /** effective annual rate (decimal) */
+  rateEff: number;
+  /** regular monthly payment */
+  payment: number;
+  interest: number;
+  /** repayment incl. Sondertilgung */
+  principal: number;
+  /** balance left when the period ends: refinanced, or 0 when repaid */
+  balanceEnd: number;
+}
+
 export interface MonthRow {
   t: number;
   portfolio: number;
@@ -203,6 +222,8 @@ export interface SimResult {
   firstRefi: RefiInfo | null;
   /** Month index (from month 0) when the loan is repaid; may lie past the horizon. null = not within 60 years. */
   debtFreeMonth: number | null;
+  /** Fixed-rate periods of the loan (recorded runs only); extended past the horizon when `extend` is set */
+  loanPeriods: LoanPeriod[] | null;
   rows: MonthRow[] | null;
   years: YearRow[] | null;
 }

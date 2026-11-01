@@ -961,6 +961,21 @@ select {
   padding: 4px 8px;
 }
 
+.data-table tfoot th,
+.data-table tfoot td {
+  font-weight: 500;
+  border-bottom: none;
+}
+
+.periods-table tbody th {
+  white-space: nowrap;
+}
+
+.data-table tr.is-beyond th,
+.data-table tr.is-beyond td {
+  color: var(--text-secondary);
+}
+
 .yearly .yearly-body {
   display: none;
 }

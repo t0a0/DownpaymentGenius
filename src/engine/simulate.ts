@@ -6,13 +6,14 @@
 import { bankCheck } from './constraints';
 import { purchaseFees } from './fees';
 import { incomeAt, type Model } from './model';
-import { annuityPayment, cloneLoan, loanStep, openLoan, type LoanState } from './mortgage';
+import { annuityPayment, cloneLoan, loanStep, openLoan, trackPeriod, type LoanState } from './mortgage';
 import { bankLtvOf, followUpRate, marginalRate, purchaseRate } from './rates';
 import { HESSENGELD, hessengeld } from './subsidies';
 import { Portfolio } from './tax';
 import type {
   Buckets,
   Infeasible,
+  LoanPeriod,
   MonthRow,
   PurchaseInfo,
   RefiInfo,
@@ -49,6 +50,8 @@ export class SimState {
   dead: Infeasible | null = null;
   purchase: PurchaseInfo | null = null;
   firstRefi: RefiInfo | null = null;
+  /** fixed-rate periods, only collected for recorded runs */
+  periods: LoanPeriod[] | null = null;
 
   constructor(pf: Portfolio) {
     this.pf = pf;
@@ -70,6 +73,7 @@ export class SimState {
     s.dead = this.dead;
     s.purchase = this.purchase;
     s.firstRefi = this.firstRefi;
+    s.periods = this.periods ? this.periods.map((p) => ({ ...p })) : null;
     return s;
   }
 }
@@ -189,6 +193,7 @@ export function runMonths(
         out += st.interest + st.principal + st.extra;
         s.b.interest += st.interest;
         s.principalPaid += st.principal + st.extra;
+        if (s.periods) trackPeriod(s.periods, l, t, st);
         if (st.refi && !s.firstRefi) {
           s.firstRefi = {
             month: t,
@@ -332,6 +337,7 @@ function debtFreeMonth(m: Model, s: SimState): number | null {
   const limit = l.start + 720;
   for (let t = m.N; t < limit; t++) {
     const st = loanStep(l, t, (tt, bal) => followUpRate(m.rates, bal, value, tt), m.toNominal);
+    if (s.periods) trackPeriod(s.periods, l, t, st);
     if (st.refi && !s.firstRefi) {
       s.firstRefi = {
         month: t,
@@ -357,6 +363,7 @@ export interface SimOptions {
 export function simulate(m: Model, strategy: Strategy, opts: SimOptions = {}): SimResult {
   const s = initState(m);
   const rec = opts.record ? new Recorder() : undefined;
+  if (opts.record) s.periods = [];
   runMonths(m, s, 0, m.N, strategy.buyMonth ?? -1, strategy.ltv, rec);
   if (s.dead) {
     return {
@@ -370,6 +377,7 @@ export function simulate(m: Model, strategy: Strategy, opts: SimOptions = {}): S
       purchase: s.purchase,
       firstRefi: null,
       debtFreeMonth: null,
+      loanPeriods: null,
       rows: rec?.rows ?? null,
       years: rec?.years ?? null,
     };
@@ -387,6 +395,7 @@ export function simulate(m: Model, strategy: Strategy, opts: SimOptions = {}): S
     purchase: s.purchase,
     firstRefi: s.firstRefi,
     debtFreeMonth: debtFree,
+    loanPeriods: s.periods,
     rows: rec?.rows ?? null,
     years: rec?.years ?? null,
   };

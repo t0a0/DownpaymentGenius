@@ -170,6 +170,56 @@ describe('rates', () => {
   });
 });
 
+describe('loan periods', () => {
+  const rich = (horizonYear = base().sim.horizonYear) => {
+    const i = base();
+    i.you.capital = 200_000;
+    i.you.netIncome = 9_000;
+    i.sim.horizonYear = horizonYear;
+    return prepare(i, ctx);
+  };
+
+  it('chain the fixed-rate periods until the loan is repaid', () => {
+    const r = simulate(rich(), { buyMonth: 6, ltv: 0.8 }, { record: true, extend: true });
+    expect(r.feasible).toBe(true);
+    const ps = r.loanPeriods!;
+    expect(ps.length).toBeGreaterThan(1);
+    expect(ps[0].start).toBe(6);
+    expect(ps[0].balance).toBeCloseTo(r.purchase!.loan, 6);
+    expect(ps[0].rateEff).toBe(r.purchase!.rateEff);
+    expect(ps[0].payment).toBeCloseTo(r.purchase!.payment, 6);
+    expect(ps[1].start).toBe(r.firstRefi!.month);
+    expect(ps[1].rateEff).toBe(r.firstRefi!.rateEff);
+    expect(ps[1].payment).toBeCloseTo(r.firstRefi!.paymentAfter, 6);
+    for (let k = 1; k < ps.length; k++) {
+      expect(ps[k].start).toBe(ps[k - 1].end + 1);
+      expect(ps[k].start - ps[k - 1].start).toBe(120);
+      expect(ps[k].balance).toBeCloseTo(ps[k - 1].balanceEnd, 6);
+    }
+    for (const p of ps) expect(p.balance - p.principal).toBeCloseTo(p.balanceEnd, 6);
+    const last = ps[ps.length - 1];
+    expect(last.balanceEnd).toBe(0);
+    expect(last.end).toBe(r.debtFreeMonth);
+  });
+
+  it('without extension they stop at the horizon and match the interest bucket', () => {
+    const m = rich(ctx.startYear + 15);
+    const r = simulate(m, { buyMonth: 6, ltv: 0.8 }, { record: true });
+    const ps = r.loanPeriods!;
+    expect(ps.reduce((a, p) => a + p.interest, 0)).toBeCloseTo(r.buckets.interest, 6);
+    expect(ps[ps.length - 1].end).toBe(m.N - 1);
+    expect(ps[ps.length - 1].balanceEnd).toBeCloseTo(r.rows![m.N - 1].loan, 6);
+  });
+
+  it('cash purchase has none; unrecorded runs skip them', () => {
+    const i = base();
+    i.you.capital = 600_000;
+    const m = prepare(i, ctx);
+    expect(simulate(m, { buyMonth: 0, ltv: 0 }, { record: true, extend: true }).loanPeriods).toEqual([]);
+    expect(simulate(m, { buyMonth: 0, ltv: 0.5 }).loanPeriods).toBeNull();
+  });
+});
+
 describe('investment tax', () => {
   it('§32d rate: 26.375 % without church tax, ≈27.819 % at 8 %, ≈27.995 % at 9 %', () => {
     expect(capitalTaxRate(false, 0.09)).toBeCloseTo(0.26375, 10);

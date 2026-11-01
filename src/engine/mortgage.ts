@@ -1,5 +1,7 @@
 // Annuity loan with fixed-rate periods (Zinsbindung), yearly Sondertilgung and refinancing.
 
+import type { LoanPeriod } from './types';
+
 export interface LoanState {
   balance: number;
   original: number;
@@ -30,6 +32,28 @@ export interface LoanStep {
   extra: number;
   /** set in the month the loan was refinanced */
   refi: RefiEvent | null;
+}
+
+/** Add one loan month to the period list; a refinancing (or the first payment) opens a new period. */
+export function trackPeriod(periods: LoanPeriod[], l: LoanState, t: number, st: LoanStep): void {
+  let p = periods[periods.length - 1];
+  if (!p || st.refi) {
+    p = {
+      start: t,
+      end: t,
+      balance: l.balance + st.principal + st.extra,
+      rateEff: l.eff,
+      payment: l.payment,
+      interest: 0,
+      principal: 0,
+      balanceEnd: 0,
+    };
+    periods.push(p);
+  }
+  p.end = t;
+  p.interest += st.interest;
+  p.principal += st.principal + st.extra;
+  p.balanceEnd = l.balance;
 }
 
 /** German annuity: monthly payment = loan × (Sollzins + initial Tilgung) / 12. */

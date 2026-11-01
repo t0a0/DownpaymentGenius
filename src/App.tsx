@@ -6,6 +6,7 @@ import { Header, SharedBanner } from './components/Header';
 import { Heatmap } from './components/Heatmap';
 import { InputPanel } from './components/InputPanel';
 import { KpiStrip } from './components/KpiStrip';
+import { LoanPeriods } from './components/LoanPeriods';
 import { NetWorthChart } from './components/NetWorthChart';
 import { PrintSummary } from './components/PrintSummary';
 import { ScenarioTable } from './components/ScenarioTable';
@@ -97,6 +98,7 @@ export function App() {
           <TimingChart />
           <Heatmap />
           <WasteBars />
+          <LoanPeriods />
           <div className="two-col">
             <BreakevenList />
             <StressPanel />

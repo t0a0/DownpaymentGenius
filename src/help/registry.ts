@@ -239,4 +239,15 @@ export const HELP: Record<string, HelpEntry> = {
   'chart.stress': e('Zinsänderungsrisiko', ['How can I protect myself against higher follow-up rates?'], ['Wie schütze ich mich gegen höhere Anschlusszinsen?']),
   'chart.scenarios': e('Szenarioanalyse', ['How likely are such macro scenarios over 30 years?'], ['Wie wahrscheinlich sind solche Makro-Szenarien über 30 Jahre?']),
   'chart.yearly': e('Jahresübersicht', ['What should I check in a yearly cash-flow table?'], ['Worauf sollte ich in einer jährlichen Cashflow-Tabelle achten?']),
+  'chart.loanPeriods': e(
+    'Zinsbindung und Anschlussfinanzierung',
+    [
+      'Should I fix the rate for a long time or refinance every 10 years?',
+      'When does a Forward-Darlehen make sense before the Zinsbindung ends?',
+    ],
+    [
+      'Sollte ich den Zins lange festschreiben oder alle 10 Jahre anschlussfinanzieren?',
+      'Wann lohnt sich ein Forward-Darlehen vor dem Ende der Zinsbindung?',
+    ],
+  ),
 };
