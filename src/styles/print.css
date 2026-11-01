@@ -1,0 +1,114 @@
+/* PDF via the browser's print dialog: controls hidden, light theme forced by App on beforeprint,
+   inputs summary + KPIs + charts (SVG) + the yearly table. */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+  }
+
+  .no-print,
+  .help-btn,
+  .help-pop,
+  .toast,
+  .banner,
+  .panel {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .topbar {
+    position: static;
+    border: none;
+    padding: 0 0 8px;
+  }
+
+  .layout {
+    display: block;
+    padding: 0;
+    max-width: none;
+  }
+
+  .card,
+  .kpi,
+  .kpi-group {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .card {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
+
+  .yearly {
+    break-inside: auto;
+  }
+
+  .yearly .yearly-body {
+    display: block !important;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+
+  .chart {
+    width: 680px !important;
+  }
+
+  .print-summary h2 {
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  .print-grid {
+    columns: 2;
+    column-gap: 24px;
+    font-size: 10.5px;
+    margin: 8px 0 16px;
+  }
+
+  .print-grid > div {
+    break-inside: avoid;
+    margin-bottom: 8px;
+  }
+
+  .print-grid h3 {
+    font-size: 12px;
+    margin: 0 0 2px;
+  }
+
+  .print-grid dl {
+    margin: 0;
+  }
+
+  .print-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 0.5px solid #e1e0d9;
+  }
+
+  .print-row dd {
+    margin: 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .footer {
+    break-before: page;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
