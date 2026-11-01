@@ -259,6 +259,7 @@ export const en = {
   'help.germanTerm': 'German term',
   'help.typical': 'Typical / history',
   'help.open': 'Help: {title}',
+  'help.use': 'How it’s used',
 
   'prompt.template':
     "I'm using a calculator that decides whether to buy a home in Germany now or keep saving to buy later. Explain '{term}' ({germanTerm}) in detail: what it is, how it works in Germany, typical values in {currentYear}, how it changes the buy-now-vs-wait decision, and common mistakes. My current setting: {value}. Context: price {price}, {state}, down payment {down}, loan {loan}, rate {rate}, horizon {year}.",
@@ -394,6 +395,116 @@ export const en = {
   'help.sim.liquidate.short': 'At the horizon value the portfolio after the tax a sale would cost and the home after selling costs. Off: both gross.',
   'help.sim.sellingCosts.title': 'Selling costs',
   'help.sim.sellingCosts.short': 'Seller’s broker share and other costs, deducted from the home at the horizon when valuing as if liquidated.',
+
+  // ---------- help: how each input feeds the results ----------
+  'help.you.capital.use':
+    'Your starting wealth in every strategy. Buying sells the down payment and fees out of it (taxing the gain); the rest keeps earning the expected return. More capital allows an earlier purchase or a smaller loan.',
+  'help.you.capitalGainPct.use':
+    'Sets the tax due whenever today’s shares are sold: for the down payment, in months where owning costs more than your budget, and at the horizon when valued as if liquidated. A high gain makes paying the down payment from the portfolio more expensive.',
+  'help.you.cash.use':
+    'Part of your starting wealth. Up to the emergency cushion it stays in cash at the cash rate; the rest is invested from the first month and can pay the down payment like the portfolio.',
+  'help.you.cushion.use':
+    'Money held back from the purchase: the cushion is never spent on the down payment and earns only the cash rate instead of the investment return. A bigger cushion leaves less to buy with.',
+  'help.you.monthlySavings.use':
+    'Sets the monthly budget of every strategy (cold rent + savings). Renters invest the savings; owners pay the mortgage and owner costs from the same budget and invest what is left, or sell investments if it falls short. Higher savings build the down payment faster.',
+  'help.you.savingsGrowth.use':
+    'Raises the monthly budget of every strategy each year. Higher growth means more to invest later and makes a mortgage payment that is tight today easier to carry over time.',
+  'help.you.netIncome.use':
+    'Only used for the bank check: a purchase month and LTV whose payment exceeds the bank limit (a share of this income) is ruled out. It also gives the payment / income figure. It does not change your budget; that comes from rent + savings.',
+  'help.you.incomeGrowth.use':
+    'Grows the income used in the bank check, so a loan that fails the limit today can pass in a later purchase month. It does not raise your savings; use savings growth for that.',
+  'help.you.birthYear.use':
+    'Only matters when the horizon is set as an age: horizon year = birth year + horizon age. Otherwise it does not change the results.',
+  'help.you.household.use':
+    'A couple gets twice the tax-free allowance on investment income each year, so every strategy pays less tax on its returns. In Hesse it also sets how many buyers get Hessengeld (€10,000 each).',
+  'help.you.churchTax.use':
+    'Raises the tax on all investment income (returns, Vorabpauschale, sales) from ≈ 26.4 % to ≈ 28 %, so invested money grows slightly slower in every strategy.',
+  'help.you.firstTimeBuyer.use':
+    'In Hesse, required for Hessengeld: purchases up to the deadline get €10,000 per buyer + €5,000 per child (at most the transfer tax paid), in 10 yearly instalments. This can pull the best moment to buy forward. No effect in other states.',
+  'help.you.childBirthYears.use':
+    'In Hesse, with first-time buyer on, each child under 18 at the purchase adds €5,000 Hessengeld, so a birth or an 18th birthday can shift the best purchase month. No effect in other states.',
+  'help.invest.expectedReturn.use':
+    'The growth of all invested money in every strategy. It is what your down payment would earn if you kept renting, so it is the main cost of tying money up in a home. A higher return favours renting longer and a larger loan.',
+  'help.invest.fundType.use':
+    'Sets how much of each fund gain is tax-free. Less tax keeps more of the return invested in every strategy, which slightly favours keeping money in the portfolio.',
+  'help.invest.cashRate.use':
+    'The emergency cushion earns this, after tax, in every strategy. The cushion is the same whether you rent or buy, so it barely affects which strategy wins.',
+  'help.invest.basiszins.use':
+    'Drives the Vorabpauschale tax taken from the portfolio each January. A higher Basiszins takes more tax out early; it is credited when you sell, so it mostly moves tax forward in time.',
+  'help.rent.coldRent.use':
+    'What renting costs: you pay it until the purchase, or until the horizon if you never buy. It is also part of the monthly budget (cold rent + savings), so after buying the rent you no longer pay goes to the mortgage and owner costs. Higher rent makes buying more attractive.',
+  'help.rent.rentGrowth.use':
+    'Rent and the monthly budget rise by this each year. Renters spend the rise on rent, while owners invest it on top of a fixed mortgage payment, so faster rent growth favours buying earlier.',
+  'help.property.type.use':
+    'Decides which owner costs apply. Apartment: Hausgeld + maintenance per m² + property tax. House: maintenance per m² + building insurance + property tax. Owners pay these every month, which leaves less to invest.',
+  'help.property.city.use':
+    'A shortcut: picks the state and sets price and rent growth to local values. The city itself is not used in the calculation, only those values.',
+  'help.property.state.use':
+    'Sets the transfer tax paid at purchase (3.5–6.5 % of the price; lost money that grows with the price if you wait), the church tax rate, and whether Hessengeld applies (Hesse only).',
+  'help.property.price.use':
+    'The basis of every buy strategy: later purchases pay this grown by price growth, the fees are a % of it, each LTV is a share of it, and it is the home’s starting value in net worth.',
+  'help.property.area.use':
+    'Multiplies the per-m² owner costs (Hausgeld, maintenance), so a larger home costs more to own each month. It also scales the typical price and rent shown for the city.',
+  'help.property.priceGrowth.use':
+    'Works in two directions: waiting makes the purchase (and the % fees) more expensive, while after buying your home’s value grows by price growth minus ageing drag. Higher growth favours buying earlier.',
+  'help.property.ageingDrag.use':
+    'Lowers the growth of your own home’s value after purchase, but not the price you would pay by waiting. A higher drag means a lower home value at the horizon and makes buying less attractive.',
+  'help.property.notaryPct.use':
+    'A purchase cost as a % of the price, paid from own money unless fees are financed. It is lost money in every buy strategy and grows with the price if you wait.',
+  'help.property.brokerPct.use':
+    'A purchase cost as a % of the price, paid from own money unless fees are financed. It is lost money in every buy strategy and grows with the price if you wait.',
+  'help.property.noBroker.use':
+    'Removes the broker fee from the purchase costs, which lowers the money needed at purchase and improves every buy strategy.',
+  'help.property.oneOffCosts.use':
+    'Added to the money needed at purchase and counted as lost money in every buy strategy, so it raises the down payment you need.',
+  'help.property.hausgeld.use':
+    'Hausgeld × living area is paid every month after buying, growing with inflation. Renters do not pay it, so it counts against buying and leaves owners less to invest.',
+  'help.property.maintenance.use':
+    'Maintenance × living area is paid every month after buying, growing with inflation. Renters do not pay it, so it counts against buying and leaves owners less to invest.',
+  'help.property.insurance.use':
+    'Paid by house owners in monthly twelfths, growing with inflation. It counts against buying and leaves owners less to invest.',
+  'help.property.grundsteuer.use':
+    'Paid by owners in monthly twelfths, growing with inflation, as an extra owner cost. Leave it at 0 if your rent already covers it through operating costs.',
+  'help.property.hessengeldExtension.use':
+    'Off: purchases after Oct 2029 get no Hessengeld, which can make buying before then look best. On: later purchase months still get it.',
+  'help.mortgage.rateTiers.use':
+    'Sets the interest rate for each loan size, so it is the main cost of borrowing: the model weighs these rates against your investment return to pick the best LTV. In automatic follow-up mode it also sets the refinancing rates.',
+  'help.mortgage.fixationAdj.use':
+    'Added to the table rate for the Zinsbindung you chose, at purchase and (in automatic mode) at each refinancing. A higher surcharge makes a long fixation more expensive.',
+  'help.mortgage.fixationYears.use':
+    'Picks the surcharge from the fixation table and decides when the remaining balance is refinanced. A longer fixation usually costs more now but shields the loan from rate drift for longer.',
+  'help.mortgage.bwDiscount.use':
+    'Rates are tiered by loan ÷ (price × (1 − discount)), so a discount pushes each loan into a higher, more expensive tier and lowers the largest possible loan.',
+  'help.mortgage.tilgung.use':
+    'Sets the monthly payment: loan × (rate + Tilgung) / 12. Higher repayment means less total interest and an earlier debt-free date, but leaves less of the budget to invest and must stay under the bank’s payment limit.',
+  'help.mortgage.sondertilgung.use':
+    'Each loan year this share of the original loan is repaid extra, from the budget or the portfolio. It cuts interest and brings the debt-free date forward, but that money no longer earns the investment return.',
+  'help.mortgage.drift.use':
+    'Shifts every future rate by this many points per year until the drift ends: for later purchases and, in automatic mode, for refinancing. Rising rates make waiting more expensive; falling rates reward it.',
+  'help.mortgage.driftYears.use':
+    'How long the drift lasts. The longer it runs, the bigger the total rate change for late purchases and refinancing.',
+  'help.mortgage.followUpMode.use':
+    'Decides the rate on the remaining balance after each Zinsbindung, which drives interest after refinancing and the debt-free date. In automatic mode the rate usually falls as the loan shrinks relative to the home’s value.',
+  'help.mortgage.followUpRate.use':
+    'The rate on the remaining balance after each Zinsbindung. A higher rate raises interest and the payment after refinancing and delays the debt-free date.',
+  'help.mortgage.financeFees.use':
+    'Lets the model also borrow the fees (loan up to 110 % of the price), so you can buy earlier with less own money, at the most expensive rate tier. The model only picks it if it pays off.',
+  'help.mortgage.maxPaymentShare.use':
+    'The bank check: any purchase month and LTV whose payment exceeds this share of net income is ruled out. A lower limit forces a smaller loan or a later purchase.',
+  'help.sim.horizonMode.use': 'Picks how the comparison date is set. All results compare net worth at that date.',
+  'help.sim.horizonYear.use':
+    'The date at which all strategies are compared by net worth. A longer horizon gives the home more time to grow and the purchase costs time to pay off; a short one favours renting.',
+  'help.sim.horizonAge.use':
+    'Sets the comparison date via your age (birth year + this age). A longer horizon gives the home more time to grow and the purchase costs time to pay off; a short one favours renting.',
+  'help.sim.maxWait.use':
+    'Limits which purchase months are searched for the best moment. If the best moment lands at the end of this range, waiting even longer may be better.',
+  'help.sim.cpi.use':
+    'Owner costs and one-off costs grow with it, and “today’s money” divides by it. Rent, prices and returns have their own growth rates and are not affected.',
+  'help.sim.real.use': 'Display only: amounts are divided by inflation up to the horizon. It does not change which strategy wins.',
+  'help.sim.liquidate.use':
+    'On: at the horizon the portfolio counts after the tax on its gains and the home after selling costs, so both are compared as cash. Off: both at gross value, as if you keep them.',
+  'help.sim.sellingCosts.use':
+    'Deducted from the home’s value at the horizon when valuing as if liquidated, so higher selling costs count against buying.',
 
   // ---------- help: KPIs ----------
   'help.kpi.bestMoment.title': 'Best moment to buy',
