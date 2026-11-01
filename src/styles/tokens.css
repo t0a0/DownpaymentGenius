@@ -1,0 +1,105 @@
+/* Palette "Clear blue". Every colour is a token; dark mode uses its own steps, not an inversion.
+   A manual toggle (data-theme on <html>) wins over the OS preference in both directions. */
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --surface-raised: #ffffff;
+  --text: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --border: rgba(11, 11, 11, 0.1);
+  --border-strong: rgba(11, 11, 11, 0.2);
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --accent: #2a78d6;
+  --accent-text: #256abf;
+  --accent-soft: rgba(42, 120, 214, 0.1);
+  --button: #256abf;
+  --on-button: #ffffff;
+  --shadow: 0 1px 2px rgba(11, 11, 11, 0.06), 0 4px 16px rgba(11, 11, 11, 0.08);
+
+  --series-now: #2a78d6;
+  --series-later: #eb6834;
+  --series-never: #1baf7a;
+
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+
+  --heat-0: #cde2fb;
+  --heat-1: #b7d3f6;
+  --heat-2: #9ec5f4;
+  --heat-3: #86b6ef;
+  --heat-4: #6da7ec;
+  --heat-5: #5598e7;
+  --heat-6: #3987e5;
+  --heat-7: #2a78d6;
+  --heat-8: #256abf;
+  --heat-9: #1c5cab;
+  --heat-10: #184f95;
+  --heat-11: #104281;
+  --heat-12: #0d366b;
+
+  --tornado-low: #86b6ef;
+  --tornado-high: #1c5cab;
+
+  --font: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-caption: 12px;
+  --fs-small: 13px;
+  --fs-input: 14px;
+  --fs-body: 16px;
+  --fs-title: 20px;
+  --fs-kpi: 28px;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-raised: #222220;
+    --text: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --border: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.2);
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --accent: #3987e5;
+    --accent-text: #6da7ec;
+    --accent-soft: rgba(57, 135, 229, 0.16);
+    --button: #256abf;
+    --on-button: #ffffff;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.4);
+    --series-now: #3987e5;
+    --series-later: #d95926;
+    --series-never: #199e70;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-raised: #222220;
+  --text: #f0efec;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --accent: #3987e5;
+  --accent-text: #6da7ec;
+  --accent-soft: rgba(57, 135, 229, 0.16);
+  --button: #256abf;
+  --on-button: #ffffff;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.4);
+  --series-now: #3987e5;
+  --series-later: #d95926;
+  --series-never: #199e70;
+}
