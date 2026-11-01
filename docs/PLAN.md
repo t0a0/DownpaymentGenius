@@ -25,7 +25,8 @@ Pages works on the free plan) is empty except `LICENSE`. Deliverable: a static, 
 | History | **Lean**: curated stats with sources → slider ranges, scenario presets, "history says" hints, refinancing **stress test**, **city presets** |
 | Region | Germany + big cities (presets); Grunderwerbsteuer and church-tax rate per state |
 | Persistence | Autosave + named scenarios (localStorage), JSON export/import, share link (URL hash), PDF via print stylesheet |
-| Stack | Vite + TypeScript + React, Zustand, ECharts (SVG renderer, tree-shaken `echarts/core`), Vitest, Zod, lz-string; GitHub Actions → Pages |
+| Stack | Vite + TypeScript + React, Zustand, ECharts (SVG renderer, tree-shaken `echarts/core`), Vitest, Zod, lz-string, `@fontsource/ibm-plex-sans`; GitHub Actions → Pages |
+| Design | Palette **"Clear blue"** (light + dark, colour-blind checked), font **IBM Plex Sans**. Full tokens in "Design" below |
 | Language | EN + DE toggle; German terms shown in tooltips in both languages |
 | Help | A **"?" on every configurable field** (KPIs too). Hover/tap opens a short explanation popup with a **"Copy AI prompt"** button that copies a ready-made prompt for an AI chat to explain the topic in depth |
 
@@ -180,12 +181,68 @@ Pages works on the free plan) is empty except `LICENSE`. Deliverable: a static, 
     and "reset to best".
   - `TimingChart`: net worth at H vs purchase month. LTV tiers shaded, infeasible months greyed, peak marked.
   - `Heatmap`: month × LTV. Tier edges marked. Clicking a cell selects that strategy.
-  - `WasteBars`: lost (interest, rent, fees, owner costs, taxes, selling costs) vs made (returns, home growth, subsidies),
-    with the net marker.
+  - `WasteBars`: one row per bucket — lost (interest, rent, fees, owner costs, taxes, selling costs) to the left of zero,
+    made (returns, home growth, subsidies) to the right — with one bar per scenario in that scenario's series colour,
+    plus a net marker per scenario.
   - `BreakevenList`: one line per input, e.g. "buying now wins if price growth > 3.1%/yr".
   - `SensitivityChart` (tornado), `StressPanel`, `YearlyTable` (collapsible), `AssumptionsFooter`.
 - Responsive: one column under 900px, 16px gutters. Light/dark via CSS variables. ECharts can't read CSS variables, so
   chart colors are read with `getComputedStyle` and re-applied when the theme changes; print forces the light theme.
+
+## Design (`src/styles/tokens.css`, `src/charts/theme.ts`)
+Palette **"Clear blue"**, chosen by the user. Every colour is a CSS custom property on `:root`; dark values are set under
+`@media (prefers-color-scheme: dark)` guarded by `:root:not([data-theme="light"])`, and again under
+`:root[data-theme="dark"]`, so a manual light/dark toggle wins both ways. Dark mode uses its own steps (below), not an
+automatic inversion.
+
+**UI tokens**
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `--page` | `#f9f9f7` | `#0d0d0d` | Page background |
+| `--surface` | `#fcfcfb` | `#1a1a19` | Cards, input panel, chart surface |
+| `--text` | `#0b0b0b` | `#f0efec` | Body text, values (15.2:1 dark) |
+| `--text-secondary` | `#52514e` | `#c3c2b7` | Labels, help text (7.7:1 / 9.7:1) |
+| `--text-muted` | `#898781` | `#898781` | Axis ticks, placeholders only (3.5:1 light — never body text) |
+| `--border` | `rgba(11,11,11,0.10)` | `rgba(255,255,255,0.10)` | Hairlines, card rings |
+| `--grid` | `#e1e0d9` | `#2c2c2a` | Chart gridlines |
+| `--axis` | `#c3c2b7` | `#383835` | Chart baseline/axis |
+| `--accent` | `#2a78d6` | `#3987e5` | Slider track/thumb, focus ring, selected states |
+| `--accent-text` | `#256abf` | `#6da7ec` | Links and accent text (5.3:1 / 7.0:1) |
+| `--button` / `--on-button` | `#256abf` / `#ffffff` | `#256abf` / `#ffffff` | Primary button (5.4:1) |
+
+**Chart colours** (the three scenarios keep the same colour in every chart)
+| Role | Light | Dark | Mark |
+|---|---|---|---|
+| Buy now | `#2a78d6` | `#3987e5` | 2px solid line / bar |
+| Buy at month X | `#eb6834` | `#d95926` | 2px solid line / bar |
+| Never buy | `#1baf7a` | `#199e70` | 2px **dotted** line / bar |
+| Scenario bands | series colour at 15% opacity | same | Area between scenario min/max |
+| Purchase marker | `--text-muted` hairline + label | same | Vertical rule at purchase month |
+
+- Validated with the dataviz palette checker (all pairs, both modes): CVD ΔE ≥ 9.2 light / 9.4 dark, normal-vision
+  ΔE ≥ 24.0 / 20.9. Light-mode "never buy" green is 2.74:1 on the surface, so lines carry **direct end labels** and
+  the yearly table is the text alternative; the dotted pattern is the second cue.
+- **Heatmap** (sequential blue, light → dark = worse → better net worth): `#cde2fb` `#b7d3f6` `#9ec5f4` `#86b6ef`
+  `#6da7ec` `#5598e7` `#3987e5` `#2a78d6` `#256abf` `#1c5cab` `#184f95` `#104281` `#0d366b`. Infeasible cells: `--grid`
+  fill with a 45° line texture. Selected and best cells: 2px `--text` ring. Tier edges: `--axis` hairlines.
+- **Tornado**: low end of the input range `#86b6ef`, high end `#1c5cab` (two steps of the same blue), centred on the
+  base-case net worth.
+- **Status** (affordability, infeasible, stress-test warnings): good `#0ca30c`, warning `#fab219`, serious `#ec835a`,
+  critical `#d03b3b`, same in both modes, always with an icon and a text label, never colour alone.
+- **Marks**: 2px lines, ≥ 8px point markers, bars with 4px rounded data ends and a 2px surface gap, recessive
+  gridlines, one y-axis per chart, a legend whenever there are ≥ 2 series, hover tooltips on every chart (crosshair on
+  line charts, per-cell on the heatmap). Values and labels use text tokens, never the series colour.
+
+**Typography**
+- **IBM Plex Sans**, weights 400 and 500 only (500 for headings, KPI values and emphasis), self-hosted via
+  `@fontsource/ibm-plex-sans` (latin subset covers ä ö ü ß €). Stack:
+  `"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif`. ECharts `textStyle.fontFamily` uses the same stack.
+- Sizes: 12 (axis, captions) · 13 (help popups, table) · 14 (inputs, labels) · 16 (body) · 20 (section titles) ·
+  28 (KPI values) px; line height 1.5 for body text.
+- `font-variant-numeric: tabular-nums` on every number that updates while a slider moves (KPIs, number boxes, the
+  yearly table, axis ticks) so digits don't jitter.
+- Numbers and dates are formatted with `Intl.NumberFormat` / `Intl.DateTimeFormat` per locale
+  (de: `412.350 €`, `4,26 %`; en: `€412,350`, `4.26%`).
 
 ## Persistence, sharing, PDF, i18n (`src/state/`, `src/i18n/`)
 - `store.ts` (Zustand): inputs + selected strategy. `schema.ts`: Zod schema + `migrate(version)`.
@@ -207,7 +264,8 @@ Pages works on the free plan) is empty except `LICENSE`. Deliverable: a static, 
 - `README.md`: method, assumptions, sources, disclaimer. `.claude/launch.json` for `npm run dev` preview.
 
 ## Implementation order
-1. Scaffold Vite/React/TS, Vitest, deploy workflow, i18n skeleton (`t()`, empty `en.ts`/`de.ts`).
+1. Scaffold Vite/React/TS, Vitest, deploy workflow, i18n skeleton (`t()`, empty `en.ts`/`de.ts`), design tokens
+   (`tokens.css`, light + dark) and the IBM Plex Sans font.
 2. Engine + unit tests (fees, rates, mortgage, tax incl. FIFO, constraints, simulate, optimize, sensitivity, breakeven).
 3. Curated `history.ts` (stats + named scenarios) + `cities.ts` with sources.
 4. Store + worker + `InputPanel`/`NumberSlider` + `HelpTip` (registry, prompt builder, EN/DE help texts) +
