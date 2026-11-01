@@ -78,5 +78,6 @@ The simulation runs in a Web Worker (`src/worker/sim.worker.ts`); the engine in 
 
 ## Deployment
 
-Pushing to `master` runs `.github/workflows/deploy.yml` (`npm ci` → `npm test` → `npm run build` → GitHub Pages).
+Pull requests run `.github/workflows/ci.yml` (`npm ci` → `npm test` → `npm run build`). Pushing to `master` runs
+`.github/workflows/deploy.yml` (the same steps, then GitHub Pages).
 One-time setup: repository **Settings → Pages → Source: GitHub Actions**.
